@@ -1,13 +1,25 @@
-
-<# Custom Script for Windows to install a file from Azure Storage using the staging folder created by the deployment script #>
+#
+# MyCustomScriptExtension.ps1
+#
 param (
-    [string]$artifactsLocation,
-    [string]$artifactsLocationSasToken,
-    [string]$folderName,
-    [string]$fileToInstall
+  $vmAdminUsername,
+  $vmAdminPassword
 )
-
-$source = $artifactsLocation + "\$folderName\$fileToInstall" + $artifactsLocationSasToken
-$dest = "C:\WindowsAzure\$folderName"
-New-Item -Path $dest -ItemType directory
-Invoke-WebRequest $source -OutFile "$dest\$fileToInstall"
+ 
+$password =  ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential("$env:USERDOMAIN\$vmAdminUsername", $password)
+ 
+Write-Verbose -Verbose "Entering Custom Script Extension..."
+ 
+Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $PSScriptRoot -ScriptBlock {
+  param 
+  (
+    $workingDir
+  )
+ 
+  #################################
+  # Elevated custom scripts go here 
+  #################################
+  Write-Verbose -Verbose "Entering Elevated Custom Script Commands..."
+  New-Item $env:userdir AnEmptyFile.txt -ItemType file
+}
