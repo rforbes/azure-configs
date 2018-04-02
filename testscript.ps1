@@ -20,6 +20,6 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   #################################
   # Elevated custom scripts go here 
   #################################
-  Write-Verbose -Verbose "Entering Elevated Custom Script Commands..."
-  New-Item $env:userdir AnEmptyFile.txt -ItemType file
+  Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+  choco install python2
 }
