@@ -17,10 +17,12 @@ Set-NetConnectionProfile -InputObject $Profile
 
 Enable-PSRemoting -force
  
-Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $PSScriptRoot -ScriptBlock {
+Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $PSScriptRoot, $aws_key_id, $aws_secret -ScriptBlock {
   param 
   (
-    $workingDir
+    $workingDir,
+    $aws_key_id,
+    $aws_secret
   )
  
   #################################
