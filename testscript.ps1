@@ -40,6 +40,8 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_key_id = $aws_key_id"
   Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_access_key = $aws_secret"
   
+  python -m pip install --upgrade pip
+  
   pip install boto
   pip install credstash
   
