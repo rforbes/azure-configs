@@ -11,7 +11,7 @@ $credential = New-Object System.Management.Automation.PSCredential("$env:USERDOM
  
 Write-Verbose -Verbose "Entering Custom Script Extension..."
 
-Enable-PSRemoting -force
+Enable-PSRemoting -force -EA SilentlyContinue
  
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $PSScriptRoot -ScriptBlock {
   param 
