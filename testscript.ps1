@@ -56,7 +56,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   
   if (!(Test-Path "$env:userprofile\.ssh\config"))
   {
-    New-Item -path C:\Share -name $env:userprofile\.ssh\config -type "file" -force
+    New-Item -path $env:userprofile\.ssh\config -type "file" -force
   }
   else
   {
