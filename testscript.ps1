@@ -28,7 +28,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   #################################
   Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
   choco feature enable -n allowGlobalConfirmation
-  choco install ssh
+  choco install openssh
   choco install git
   choco install python2
   refreshenv
