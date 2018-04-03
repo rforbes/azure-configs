@@ -11,7 +11,11 @@ $credential = New-Object System.Management.Automation.PSCredential("$env:USERDOM
  
 Write-Verbose -Verbose "Entering Custom Script Extension..."
 
-Enable-PSRemoting -force -EA SilentlyContinue
+$Profile = Get-NetConnectionProfile -InterfaceAlias Ethernet
+$Profile.NetworkCategory = "Private"
+Set-NetConnectionProfile -InputObject $Profile
+
+Enable-PSRemoting -force
  
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $PSScriptRoot -ScriptBlock {
   param 
