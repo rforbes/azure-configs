@@ -45,12 +45,12 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   
   New-Item -path $env:userprofile\requirements.txt -ItemType file
   
-  Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/fuzzfetch.git"
-  Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/ffpuppet.git"
-  Add-Content requirements.txt -value "git+ssh://git@loki/MozillaSecurity/loki.git"
-  Add-Content requirements.txt -value "git+ssh://git@sapphire/MozillaSecurity/sapphire.git"
-  Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/avalanche.git"
-  Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/FuzzManager.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/fuzzfetch.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/ffpuppet.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+ssh://git@loki/MozillaSecurity/loki.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+ssh://git@sapphire/MozillaSecurity/sapphire.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/avalanche.git"
+  Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/FuzzManager.git"
   
   if (!(Test-Path "$env:userprofile\.ssh\config"))
   {
