@@ -3,13 +3,13 @@
 #
 param (
   $vmAdminUsername,
-  $vmAdminPassword
+  $vmAdminPassword,
+  $aws_key_id,
+  $aws_secret
 )
  
 $password =  ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential("$env:USERDOMAIN\$vmAdminUsername", $password)
- 
-Write-Verbose -Verbose "Entering Custom Script Extension..."
 
 $Profile = Get-NetConnectionProfile -InterfaceAlias Ethernet
 $Profile.NetworkCategory = "Private"
@@ -33,12 +33,17 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   choco install python2
   refreshenv
   
+  New-Item -Path $env:userprofile\.aws\credentials -force
+  Add-Content -path $env:userprofile\.aws\credentials -Value "[default]"
+  Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_key_id = $aws_key_id"
+  Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_access_key = $aws_secret"
+  
   pip install boto
   pip install credstash
   
   refreshenv
   
-  New-Item requirements.txt -ItemType file
+  New-Item -path $env:userprofile\requirements.txt -ItemType file
   
   Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/fuzzfetch.git"
   Add-Content requirements.txt -value "git+https://github.com/MozillaSecurity/ffpuppet.git"
@@ -49,12 +54,11 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   
   if (!(Test-Path "$env:userprofile\.ssh\config"))
   {
-    New-Item -path C:\Share -name $env:userprofile\.ssh\config -type "file"
+    New-Item -path C:\Share -name $env:userprofile\.ssh\config -type "file" -force
   }
   else
   {
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
-
   }
   Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
   Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
@@ -87,5 +91,5 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
   credstash -r us-east-1 get deploy-domino.pem >> $env:userprofile\.ssh\id_ecdsa.domfuzz2
   credstash -r us-east-1 get deploy-fuzzidl.pem >> $env:userprofile\.ssh\id_ecdsa.fuzzidl
   
-  pip install -U -r config/aws/requirements.txt
+  pip install -U -r $env:userprofile\requirements.txt
 }
