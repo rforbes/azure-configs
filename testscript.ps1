@@ -55,10 +55,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     {
         Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     }
-    Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
-    Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
-    Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.grizzly"
-    StrictHostKeyChecking no
+
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host grizzly-private"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
@@ -100,14 +97,14 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     
     refreshenv
 
-    $env:aws_access_key_id = $aws_key_id
-    $env:aws_secret_access_key = $aws_secret
+    $env:AWS_ACCESS_KEY_ID=$aws_key_id
+    $env:AWS_SECRET_ACCESS_KEY=$aws_secret
     
-    credstash -r us-east-1 get deploy-grizzly.pem >> $env:userprofile\.ssh\id_ecdsa.grizzly
-    credstash -r us-east-1 get deploy-grizzly-private.pem >> $env:userprofile\.ssh\id_ecdsa.grizzly_private
-    credstash -r us-east-1 get deploy-sapphire.pem >> $env:userprofile\.ssh\id_ecdsa.sapphire
-    credstash -r us-east-1 get deploy-domino.pem >> $env:userprofile\.ssh\id_ecdsa.domfuzz2
-    credstash -r us-east-1 get deploy-fuzzidl.pem >> $env:userprofile\.ssh\id_ecdsa.fuzzidl
-    
+    credstash -r us-east-1 get deploy-grizzly-private.pem | Out-File $env:userprofile\.ssh\id_ecdsa.grizzly-private -Encoding ASCII
+    credstash -r us-east-1 get deploy-sapphire.pem | Out-File $env:userprofile\.ssh\id_ecdsa.sapphire -Encoding ASCII
+    credstash -r us-east-1 get deploy-domino.pem | Out-File $env:userprofile\.ssh\id_ecdsa.domino -Encoding ASCII
+    credstash -r us-east-1 get deploy-fuzzidl.pem | Out-File $env:userprofile\.ssh\id_ecdsa.fuzzidl -Encoding ASCII
+}
+Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
     pip install -U -r $env:userprofile\requirements.txt
 }
