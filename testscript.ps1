@@ -42,7 +42,6 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     New-Item -path $env:userprofile\requirements.txt -ItemType file
     Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/fuzzfetch.git"
     Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/ffpuppet.git"
-    Add-Content -path $env:userprofile\requirements.txt -value "git+ssh://git@loki/MozillaSecurity/loki.git"
     Add-Content -path $env:userprofile\requirements.txt -value "git+ssh://git@sapphire/MozillaSecurity/sapphire.git"
     Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/avalanche.git"
     Add-Content -path $env:userprofile\requirements.txt -value "git+https://github.com/MozillaSecurity/FuzzManager.git"
@@ -61,25 +60,25 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.grizzly-private"
-    StrictHostKeyChecking no
+    Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host sapphire"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.sapphire"
-    StrictHostKeyChecking no
+    Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host domfuzz2"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.domfuzz2"
-    StrictHostKeyChecking no
+    Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host fuzzidl"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.fuzzidl"
-    StrictHostKeyChecking no
+    Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
 }
 
