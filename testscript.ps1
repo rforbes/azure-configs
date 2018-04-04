@@ -81,7 +81,12 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
 }
 
-Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
+Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ArgumentList $aws_key_id, $aws_secret -ScriptBlock {
+    param 
+    (
+        $aws_key_id,
+        $aws_secret
+    )
     
     python -m pip install --upgrade pip
     
@@ -90,6 +95,9 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBl
     
     refreshenv
 
+    $env:aws_access_key_id = $aws_key_id
+    $env:aws_secret_access_key = $aws_secret
+    
     credstash -r us-east-1 get deploy-grizzly.pem >> $env:userprofile\.ssh\id_ecdsa.grizzly
     credstash -r us-east-1 get deploy-grizzly-private.pem >> $env:userprofile\.ssh\id_ecdsa.grizzly_private
     credstash -r us-east-1 get deploy-sapphire.pem >> $env:userprofile\.ssh\id_ecdsa.sapphire
