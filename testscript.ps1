@@ -106,4 +106,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
 }
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
     pip install -U -r $env:userprofile\requirements.txt
+    git clone -v --depth 1 git@grizzly:MozillaSecurity/grizzly.git
+    git clone -v --depth 1 git@grizzly-private:MozillaSecurity/grizzly-private.git grizzly-private
+    xcopy grizzly-private /O /X /E /H /K /f /Y grizzly
 }
