@@ -54,7 +54,11 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     {
         Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     }
-
+    Add-Content -path $env:userprofile\.ssh\config -value "Host grizzly"
+    Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
+    Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
+    Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.grizzly"
+    Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host grizzly-private"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
@@ -99,6 +103,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     $env:AWS_ACCESS_KEY_ID=$aws_key_id
     $env:AWS_SECRET_ACCESS_KEY=$aws_secret
     
+    credstash -r us-east-1 get deploy-grizzly.pem | Out-File $env:userprofile\.ssh\id_ecdsa.grizzly -Encoding ASCII
     credstash -r us-east-1 get deploy-grizzly-private.pem | Out-File $env:userprofile\.ssh\id_ecdsa.grizzly-private -Encoding ASCII
     credstash -r us-east-1 get deploy-sapphire.pem | Out-File $env:userprofile\.ssh\id_ecdsa.sapphire -Encoding ASCII
     credstash -r us-east-1 get deploy-domino.pem | Out-File $env:userprofile\.ssh\id_ecdsa.domino -Encoding ASCII
@@ -106,6 +111,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
 }
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
     pip install -U -r $env:userprofile\requirements.txt
+    
     git clone -v --depth 1 git@grizzly:MozillaSecurity/grizzly.git
     git clone -v --depth 1 git@grizzly-private:MozillaSecurity/grizzly-private.git grizzly-private
     xcopy grizzly-private /O /X /E /H /K /f /Y grizzly
