@@ -133,7 +133,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBl
 
     Set-Location -Path $env:userprofile\documents\grizzly
   
-    $env:DOMINO_ROOT=$env:userprofile\documents\domino
+    $env:DOMINO_ROOT="$env:userprofile\documents\domino"
     $env:ITERS=100
 
      while($true)
