@@ -29,6 +29,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     choco install openssh
     choco install git
     choco install python2
+    choco install nodejs
 
     # Create support files
     New-Item -path $env:userprofile\.aws\credentials -force
@@ -110,9 +111,17 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     Add-Content -path $env:userprofile\.fuzzmanagerconf -Value "sigdir = $env:userprofile\signatures"
     Add-Content -path $env:userprofile\.fuzzmanagerconf -Value "tool = domino-windows"
 }
+
+Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
+    git clone -v --depth 1 git@DOMfuzz2:pyoor/DOMfuzz2.git domino
+    Set-Location -Path $env:userprofile\domino
+    npm install -ddd
+    npm run build
+}
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
     pip install -U -r $env:userprofile\requirements.txt
     
+    git clone -v --branch legacy --depth 1 https://github.com/MozillaSecurity/fuzzpriv.git
     git clone -v --depth 1 git@grizzly:MozillaSecurity/grizzly.git
     git clone -v --depth 1 git@grizzly-private:MozillaSecurity/grizzly-private.git grizzly-private
     xcopy grizzly-private /O /X /E /H /K /f /Y grizzly
@@ -120,5 +129,16 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBl
     New-Item -ItemType Directory $env:userprofile\signatures
     python -m Collector.Collector --refresh
 
-}
+    fuzzfetch -n firefox --asan
 
+    Set-Location -Path $env:userprofile\documents\grizzly
+
+
+     while($true)
+     {
+        grizzly.py ./firefox/firefox $env\userprofile\documents\domino\reftests\ domino --accepted-extensions html xhtml --cache 5 -m 7000 -p prefs/prefs.js --relaunch 50 --timeout 120 --ignore log-limit memory timeout --extension=../fuzzpriv --fuzzmanager
+        if($error){
+            Start-sleep 60
+        }
+    }
+}
