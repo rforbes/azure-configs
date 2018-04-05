@@ -24,9 +24,6 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
         $aws_secret
     )
     
-    #################################
-    # Elevated custom scripts go here 
-    #################################
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
     choco feature enable -n allowGlobalConfirmation
     choco install openssh
@@ -34,7 +31,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     choco install python2
 
     # Create support files
-    New-Item -Path $env:userprofile\.aws\credentials -force
+    New-Item -path $env:userprofile\.aws\credentials -force
     Add-Content -path $env:userprofile\.aws\credentials -Value "[default]"
     Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_key_id = $aws_key_id"
     Add-Content -path $env:userprofile\.aws\credentials -Value "aws_secret_access_key = $aws_secret"
@@ -108,6 +105,10 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     credstash -r us-east-1 get deploy-sapphire.pem | Out-File $env:userprofile\.ssh\id_ecdsa.sapphire -Encoding ASCII
     credstash -r us-east-1 get deploy-domino.pem | Out-File $env:userprofile\.ssh\id_ecdsa.domino -Encoding ASCII
     credstash -r us-east-1 get deploy-fuzzidl.pem | Out-File $env:userprofile\.ssh\id_ecdsa.fuzzidl -Encoding ASCII
+    credstash -r us-east-1 get fuzzmanagerconf | Out-File $env:userprofile\.fuzzmanagerconf -Encoding ASCII
+
+    Add-Content -path $env:userprofile\.fuzzmanagerconf -Value "sigdir = $env:userprofile\signatures"
+    Add-Content -path $env:userprofile\.fuzzmanagerconf -Value "tool = domino-windows"
 }
 Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBlock {
     pip install -U -r $env:userprofile\requirements.txt
@@ -115,4 +116,9 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBl
     git clone -v --depth 1 git@grizzly:MozillaSecurity/grizzly.git
     git clone -v --depth 1 git@grizzly-private:MozillaSecurity/grizzly-private.git grizzly-private
     xcopy grizzly-private /O /X /E /H /K /f /Y grizzly
+
+    New-Item -ItemType Directory $env:userprofile\signatures
+    python -m Collector.Collector --refresh
+
 }
+
