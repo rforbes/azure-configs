@@ -73,7 +73,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     Add-Content -path $env:userprofile\.ssh\config -value "Host domfuzz2"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
-    Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.domfuzz2"
+    Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.domino"
     Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
     Add-Content -path $env:userprofile\.ssh\config -value "Host fuzzidl"
@@ -132,11 +132,13 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -ScriptBl
     fuzzfetch -n firefox --asan
 
     Set-Location -Path $env:userprofile\documents\grizzly
-
+  
+    $env:DOMINO_ROOT=$env:userprofile\documents\domino
+    $env:ITERS=100
 
      while($true)
      {
-        grizzly.py ./firefox/firefox $env\userprofile\documents\domino\reftests\ domino --accepted-extensions html xhtml --cache 5 -m 7000 -p prefs/prefs.js --relaunch 50 --timeout 120 --ignore log-limit memory timeout --extension=../fuzzpriv --fuzzmanager
+        python grizzly.py ..\firefox\firefox.exe $env:userprofile\documents\domino\reftests\ domino --accepted-extensions html xhtml --cache 5 -m 7000 -p prefs\prefs-default-e10s.js --relaunch 50 --timeout 120 --ignore log-limit memory timeout --extension=..\fuzzpriv --fuzzmanager
         if($error){
             Start-sleep 60
         }
