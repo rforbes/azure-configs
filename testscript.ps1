@@ -70,7 +70,7 @@ Invoke-Command -Credential $credential -ComputerName $env:COMPUTERNAME -Argument
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.sapphire"
     Add-Content -path $env:userprofile\.ssh\config -value "StrictHostKeyChecking no"
     Add-Content -path $env:userprofile\.ssh\config -value "`r`n"
-    Add-Content -path $env:userprofile\.ssh\config -value "Host domfuzz2"
+    Add-Content -path $env:userprofile\.ssh\config -value "Host DOMfuzz2"
     Add-Content -path $env:userprofile\.ssh\config -value "HostName github.com"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentitiesOnly yes"
     Add-Content -path $env:userprofile\.ssh\config -value "IdentityFile $env:userprofile\.ssh\id_ecdsa.domino"
